@@ -141,3 +141,31 @@ if [[ -z "$VAL" ]]; then
 else
     echo "inicomment failed: $VAL"
 fi
+
+
+echo "Testing is_package_installed()"
+
+if [[ -z "$os_PACKAGE" ]]; then
+    GetOSVersion
+fi
+
+if [[ "$os_PACKAGE" = "deb" ]]; then
+    is_package_installed dpkg
+    VAL=$?
+else
+    is_package_installed rpm
+    VAL=$?
+fi
+if [[ "$VAL" -eq 0 ]]; then
+    echo "OK"
+else
+    echo "is_package_installed() on existing package failed"
+fi
+
+is_package_installed zzzZZZzzz
+VAL=$?
+if [[ "$VAL" -ne 0 ]]; then
+    echo "OK"
+else
+    echo "is_package_installed() on non-existing package failed"
+fi
