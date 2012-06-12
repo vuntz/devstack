@@ -139,7 +139,7 @@ if [[ $EUID -eq 0 ]]; then
     # since this script runs as a normal user, we need to give that user
     # ability to run sudo
     if [[ "$os_PACKAGE" = "deb" ]]; then
-        dpkg -l sudo || apt_get update && install_package sudo
+        dpkg -l sudo || install_package sudo
         STACK_GROUP=sudo
     else
         rpm -qa | grep sudo || install_package sudo
@@ -660,7 +660,6 @@ function setup_develop() {
 
 # install package requirements
 if [[ "$os_PACKAGE" = "deb" ]]; then
-    apt_get update
     install_package $(get_packages $FILES/apts)
 else
     install_package $(get_packages $FILES/rpms)
