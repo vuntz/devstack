@@ -112,9 +112,13 @@ if [[ ! ${DISTRO} =~ (oneiric|precise|quantal|f16|f17) ]]; then
     fi
 fi
 
-if [ "${DISTRO}" = "oneiric" ] && is_service_enabled qpid ; then
-    # Qpid was introduced in precise
-    echo "You must use Ubuntu Precise or newer for Qpid support."
+if [[ "${DISTRO}" = "oneiric" || is_suse ]] && is_service_enabled qpid ; then
+    # Qpid was introduced in precise and is not in openSUSE
+    if is_suse; then
+        echo "Qpid support is not available for openSUSE/SLE, due to missing packages."
+    else
+        echo "You must use Ubuntu Precise or newer for Qpid support."
+    fi
     exit 1
 fi
 
