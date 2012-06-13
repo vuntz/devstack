@@ -558,7 +558,11 @@ function install_package() {
     if [[ "$os_PACKAGE" = "deb" ]]; then
         apt_get install $mapped_packages
     else
-        yum_install $mapped_packages
+        if is_suse; then
+            zypper_install $mapped_packages
+        else
+            yum_install $mapped_packages
+        fi
     fi
 }
 
@@ -673,6 +677,17 @@ function yum_install() {
     [[ "$(id -u)" = "0" ]] && sudo="env"
     $sudo http_proxy=$http_proxy https_proxy=$https_proxy \
         yum install -y "$@"
+}
+
+
+# zypper wrapper to set arguments correctly
+# zypper_install package [package ...]
+function zypper_install() {
+    [[ "$OFFLINE" = "True" ]] && return
+    local sudo="sudo"
+    [[ "$(id -u)" = "0" ]] && sudo="env"
+    $sudo http_proxy=$http_proxy https_proxy=$https_proxy \
+        zypper --non-interactive install --auto-agree-with-licenses "$@"
 }
 
 
