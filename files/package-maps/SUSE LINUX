@@ -1,0 +1,96 @@
+# This is a map of Fedora package names to openSUSE package names
+#
+# If a package has the same name, just keep it commented out.
+
+# The following packages are not available on openSUSE:
+#python-qpid
+#qpid-cpp-server
+
+
+#bridge-utils
+#curl
+Django python-django
+django-registration python-django-registration
+dnsmasq-utils dnsmasq
+#ebtables
+#euca2ools
+#gawk
+#gcc
+#git-core
+httpd apache2
+#iptables
+#iputils
+iscsi-initiator-utils open-iscsi
+#kpartx
+#kvm
+#libvirt
+libvirt-bin libvirt
+#libvirt-python
+#libxml2-devel
+#libxml2-python
+#lvm2
+m2crypto python-M2Crypto
+#memcached
+mod_wsgi apache2-mod_wsgi
+MySQL-python python-mysql
+mysql-server mysql-cluster-tools-debuginfo
+numpy python-numpy
+openssh-server openssh
+#parted
+#psmisc
+pylint python-pylint
+#python-anyjson
+#python-argparse
+python-BeautifulSoup python-beautifulsoup
+#python-boto
+#python-carrot
+#python-cheetah
+#python-configobj
+#python-coverage
+#python-dateutil
+#python-devel
+#python-eventlet
+#python-feedparser
+python-gflags python-python-gflags
+#python-greenlet
+#python-httplib2
+#python-iso8601
+#python-kombu
+#python-lockfile
+#python-lxml
+python-migrate python-sqlalchemy-migrate
+#python-mox
+#python-netaddr
+#python-netifaces
+#python-nose
+#python-paramiko
+python-paste python-Paste
+python-paste-deploy python-PasteDeploy
+python-paste-script python-PasteScript
+#python-pep8
+#python-pip
+python-routes python-Routes
+python-setuptools python-distribute
+#python-simplejson
+python-sphinx python-Sphinx
+python-sqlalchemy python-SQLAlchemy
+python-sqlite2 python-pysqlite
+#python-suds
+python-tempita python-Tempita
+#python-unittest2
+#python-virtualenv
+python-webob python-WebOb
+#python-wsgiref
+pyxattr python-xattr
+#rabbitmq-server
+rsyslog-relp rsyslog-module-relp
+#screen
+scsi-target-utils tgt
+sqlite sqlite3
+#sudo
+#tcpdump
+#unzip
+vconfig vlan
+#wget
+#xfsprogs
+#xinetd
