@@ -964,10 +964,14 @@ if is_service_enabled horizon; then
     else
         # Install httpd, which is NOPRIME'd
         APACHE_NAME=httpd
-        APACHE_CONF=conf.d/horizon.conf
-        sudo rm -f /etc/httpd/conf.d/000-*
         install_package httpd mod_wsgi
-        sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        if [[ "${DISTRO}" =~ ^suse- ]]; then
+            APACHE_CONF=vhost.d/horizon.conf
+        else
+            APACHE_CONF=conf.d/horizon.conf
+            sudo rm -f /etc/httpd/conf.d/000-*
+            sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        fi
     fi
     ## Configure apache to run horizon
     sudo sh -c "sed -e \"
