@@ -830,7 +830,11 @@ EOF
         MYSQL=mysql
     else
         MY_CONF=/etc/my.cnf
-        MYSQL=mysqld
+        if is_suse; then
+            MYSQL=mysql
+        else
+            MYSQL=mysqld
+        fi
     fi
 
     # Change ‘bind-address’ from localhost (127.0.0.1) to any (0.0.0.0)
