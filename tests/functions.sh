@@ -171,3 +171,44 @@ if [[ "$VAL" -ne 0 ]]; then
 else
     echo "is_package_installed() on non-existing package failed"
 fi
+
+
+echo "Testing map_package()"
+
+# We force testing with "SUSE LINUX"
+os_VENDOR="SUSE LINUX"
+
+# Test a package with a map
+grep -q "^httpd apache2$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package httpd)
+if [[ "$VAL" = "apache2" ]]; then
+    echo "OK"
+else
+    echo "map_package() on a package with a map failed: $VAL != apache2"
+fi
+
+# Test a package with no map (same name)
+grep -q "^#gcc$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package gcc)
+if [[ "$VAL" = "gcc" ]]; then
+    echo "OK"
+else
+    echo "map_package() on a package with no map failed: $VAL != gcc"
+fi
+
+# Test two packages
+VAL=$(map_package httpd gcc | xargs echo)
+if [[ "$VAL" = "apache2 gcc" ]]; then
+    echo "OK"
+else
+    echo "map_package() on two package failed: \"$VAL\" != \"apache2 gcc\""
+fi
+
+# Test non-existing package (~ no map)
+grep -q "non-existing" "$TOP/files/package-maps/$os_VENDOR" && echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package non-existing)
+if [[ "$VAL" = "non-existing" ]]; then
+    echo "OK"
+else
+    echo "map_package() on a non-existing package failed: $VAL != non-existing"
+fi
