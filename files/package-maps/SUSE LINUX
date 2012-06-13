@@ -2,9 +2,10 @@
 #
 # If a package has the same name, just keep it commented out.
 
-# The following packages are not available on openSUSE:
-#python-qpid
-#qpid-cpp-server
+# The following packages are not available on openSUSE, so we put empty
+# matches as a workaround.
+python-qpid 
+qpid-cpp-server 
 
 
 #bridge-utils
