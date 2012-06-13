@@ -308,26 +308,23 @@ function map_package() {
 # Distro-agnostic function to tell if a package is installed
 # is_package_installed package [package ...]
 function is_package_installed() {
-    local OIFS mapped_packages
+    local mapped_packages
 
     if [[ -z "$@" ]]; then
         return 1
     fi
 
-    OIFS=$IFS
-    IFS=$'\n'
-    mapped_packages=$(map_package "$@")
-    IFS=$OIFS
+    mapped_packages=$(map_package "$@" | xargs echo)
 
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
 
     if [[ "$os_PACKAGE" = "deb" ]]; then
-        dpkg -l "$mapped_packages" > /dev/null
+        dpkg -l $mapped_packages > /dev/null
         return $?
     else
-        rpm --quiet -q "$mapped_packages"
+        rpm --quiet -q $mapped_packages
         return $?
     fi
 }
@@ -335,12 +332,9 @@ function is_package_installed() {
 # Distro-agnostic package installer
 # install_package package [package ...]
 function install_package() {
-    local OIFS mapped_packages
+    local mapped_packages
 
-    OIFS=$IFS
-    IFS=$'\n'
-    mapped_packages=$(map_package "$@")
-    IFS=$OIFS
+    mapped_packages=$(map_package "$@" | xargs echo)
 
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
@@ -349,12 +343,12 @@ function install_package() {
     update_repos
 
     if [[ "$os_PACKAGE" = "deb" ]]; then
-        apt_get install "$mapped_packages"
+        apt_get install $mapped_packages
     else
         if [[ "$os_VENDOR" = "SUSE LINUX" ]]; then
-            zypper_install "$mapped_packages"
+            zypper_install $mapped_packages
         else
-            yum_install "$mapped_packages"
+            yum_install $mapped_packages
         fi
     fi
 }
