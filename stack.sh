@@ -1390,7 +1390,11 @@ EOF'
     fi
     # The user that nova runs as needs to be member of libvirtd group otherwise
     # nova-compute will be unable to use libvirt.
-    sudo usermod -a -G libvirtd `whoami`
+    if is_suse; then
+        sudo usermod -A libvirtd `whoami`
+    else
+        sudo usermod -a -G libvirtd `whoami`
+    fi
     # libvirt detects various settings on startup, as we potentially changed
     # the system configuration (modules, filesystems), we need to restart
     # libvirt to detect those changes.
