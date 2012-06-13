@@ -963,11 +963,12 @@ if is_service_enabled horizon; then
         sudo a2ensite horizon
     else
         # Install httpd, which is NOPRIME'd
-        APACHE_NAME=httpd
         install_package httpd mod_wsgi
         if [[ "${DISTRO}" =~ ^suse- ]]; then
+            APACHE_NAME=apache2
             APACHE_CONF=vhost.d/horizon.conf
         else
+            APACHE_NAME=httpd
             APACHE_CONF=conf.d/horizon.conf
             sudo rm -f /etc/httpd/conf.d/000-*
             sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
