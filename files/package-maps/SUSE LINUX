@@ -34,7 +34,7 @@ m2crypto python-M2Crypto
 #memcached
 mod_wsgi apache2-mod_wsgi
 MySQL-python python-mysql
-mysql-server mysql-cluster-tools-debuginfo
+mysql-server mysql-community-server
 numpy python-numpy
 openssh-server openssh
 #parted
