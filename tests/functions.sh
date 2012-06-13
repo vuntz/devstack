@@ -280,3 +280,36 @@ if [[ "$VAL" -ne 0 ]]; then
 else
     echo "is_package_installed() on non-existing package failed"
 fi
+
+
+echo "Testing map_package()"
+
+# We force testing with "openSUSE"
+os_VENDOR="openSUSE"
+
+# Test a package with a map
+grep -q "^dnsmasq-base  *dnsmasq$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package dnsmasq-base)
+if [[ "$VAL" = "dnsmasq" ]]; then
+    echo "OK"
+else
+    echo "map_package() on a package with a map failed: $VAL != dnsmasq"
+fi
+
+grep -q "^curl  *curl$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+# Test two packages
+VAL=$(map_package dnsmasq-base curl | xargs echo)
+if [[ "$VAL" = "dnsmasq curl" ]]; then
+    echo "OK"
+else
+    echo "map_package() on two package failed: \"$VAL\" != \"dnsmasq curl\""
+fi
+
+# Test non-existing package (~ no map)
+grep -q "non-existing" "$TOP/files/package-maps/$os_VENDOR" && echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package non-existing)
+if [[ "$VAL" = "non-existing" ]]; then
+    echo "OK"
+else
+    echo "map_package() on a non-existing package failed: $VAL != non-existing"
+fi
