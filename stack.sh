@@ -967,6 +967,9 @@ if is_service_enabled horizon; then
         if [[ "${DISTRO}" =~ ^suse- ]]; then
             APACHE_NAME=apache2
             APACHE_CONF=vhosts.d/horizon.conf
+            # Append wsgi to the list of modules to load
+            grep -q "^APACHE_MODULES=.*wsgi" /etc/sysconfig/apache2 ||
+                sudo sed '/^APACHE_MODULES=/s/^\(.*\)"$/\1 wsgi"/' -i /etc/sysconfig/apache2
         else
             APACHE_NAME=httpd
             APACHE_CONF=conf.d/horizon.conf
