@@ -837,18 +837,6 @@ EOF
         chmod 0600 $HOME/.my.cnf
     fi
 
-    # Install and start mysql-server
-    install_package mysql-server
-    if [[ "$os_PACKAGE" = "rpm" ]]; then
-        # RPM doesn't start the service
-        start_service mysqld
-        # Set the root password - only works the first time
-        sudo mysqladmin -u root password $MYSQL_PASSWORD || true
-    fi
-    # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
-    sudo mysql -uroot -p$MYSQL_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';"
-
-    # Update ``my.cnf`` for some local needs and restart the mysql service
     if [[ "$os_PACKAGE" = "deb" ]]; then
         MY_CONF=/etc/mysql/my.cnf
         MYSQL=mysql
@@ -860,6 +848,19 @@ EOF
             MYSQL=mysqld
         fi
     fi
+
+    # Install and start mysql-server
+    install_package mysql-server
+    if [[ "$os_PACKAGE" = "rpm" ]]; then
+        # RPM doesn't start the service
+        start_service $MYSQL
+        # Set the root password - only works the first time
+        sudo mysqladmin -u root password $MYSQL_PASSWORD || true
+    fi
+    # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
+    sudo mysql -uroot -p$MYSQL_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';"
+
+    # Update ``my.cnf`` for some local needs and restart the mysql service
 
     # Change ‘bind-address’ from localhost (127.0.0.1) to any (0.0.0.0)
     sudo sed -i '/^bind-address/s/127.0.0.1/0.0.0.0/g' $MY_CONF
