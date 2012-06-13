@@ -35,11 +35,13 @@ if [[ "$os_VENDOR" =~ (Ubuntu) ]]; then
 elif [[ "$os_VENDOR" =~ (Fedora) ]]; then
     # For Fedora, just use 'f' and the release
     DISTRO="f$os_RELEASE"
+elif [[ "$os_VENDOR" =~ (SUSE LINUX) ]]; then
+    # For Fedora, just use 'f' and the release
+    DISTRO="suse-$os_RELEASE"
 else
     # Catch-all for now is Vendor + Release + Update
     DISTRO="$os_VENDOR-$os_RELEASE.$os_UPDATE"
 fi
-
 
 # Settings
 # ========
