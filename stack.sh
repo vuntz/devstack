@@ -940,11 +940,19 @@ if is_service_enabled horizon; then
         sudo a2ensite horizon
     else
         # Install httpd, which is NOPRIME'd
-        APACHE_NAME=httpd
-        APACHE_CONF=conf.d/horizon.conf
-        sudo rm -f /etc/httpd/conf.d/000-*
         install_package httpd mod_wsgi
-        sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        if is_suse; then
+            APACHE_NAME=apache2
+            APACHE_CONF=vhosts.d/horizon.conf
+            # Append wsgi to the list of modules to load
+            grep -q "^APACHE_MODULES=.*wsgi" /etc/sysconfig/apache2 ||
+                sudo sed '/^APACHE_MODULES=/s/^\(.*\)"$/\1 wsgi"/' -i /etc/sysconfig/apache2
+        else
+            APACHE_NAME=httpd
+            APACHE_CONF=conf.d/horizon.conf
+            sudo rm -f /etc/httpd/conf.d/000-*
+            sudo sed '/^Listen/s/^.*$/Listen 0.0.0.0:80/' -i /etc/httpd/conf/httpd.conf
+        fi
     fi
     ## Configure apache to run horizon
     sudo sh -c "sed -e \"
