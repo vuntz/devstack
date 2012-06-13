@@ -142,6 +142,8 @@ else
     echo "inicomment failed: $VAL"
 fi
 
+rm test.ini
+
 
 echo "Testing is_package_installed()"
 
