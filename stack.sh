@@ -123,7 +123,7 @@ if [[ "${DISTRO}" = "oneiric" || is_suse ]] && is_service_enabled qpid ; then
 fi
 
 # Set the paths of certain binaries
-if [[ "$os_PACKAGE" = "deb" ]]; then
+if [[ "$os_PACKAGE" = "deb"  || is_suse ]]; then
     NOVA_ROOTWRAP=/usr/local/bin/nova-rootwrap
 else
     NOVA_ROOTWRAP=/usr/bin/nova-rootwrap
