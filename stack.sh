@@ -1617,8 +1617,12 @@ if is_service_enabled n-vol; then
         sudo stop tgt || true
         sudo start tgt
     else
-        # bypass redirection to systemctl during restart
-        sudo /sbin/service --skip-redirect tgtd restart
+        if [[ "${DISTRO}" =~ ^suse- ]]; then
+            restart_service tgtd
+        else
+            # bypass redirection to systemctl during restart
+            sudo /sbin/service --skip-redirect tgtd restart
+        fi
     fi
 fi
 
