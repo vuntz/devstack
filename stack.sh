@@ -503,10 +503,10 @@ KEYSTONE_SERVICE_PROTOCOL=${KEYSTONE_SERVICE_PROTOCOL:-http}
 # Horizon
 # -------
 
-# Allow overriding the default Apache user and group, default both to
-# current user.
+# Allow overriding the default Apache user and group, default
+# to current user and his default group.
 APACHE_USER=${APACHE_USER:-$USER}
-APACHE_GROUP=${APACHE_GROUP:-$APACHE_USER}
+APACHE_GROUP=${APACHE_GROUP:-$(id -gn $APACHE_USER)}
 
 
 # Log files
