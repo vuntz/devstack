@@ -159,6 +159,10 @@ if [[ $EUID -eq 0 ]]; then
     # some uec images sudoers does not have a '#includedir'. add one.
     grep -q "^#includedir.*/etc/sudoers.d" /etc/sudoers ||
         echo "#includedir /etc/sudoers.d" >> /etc/sudoers
+    if [ ! -d /etc/sudoers.d ]; then
+        mkdir /etc/sudoers.d
+        chmod 750 /etc/sudoers.d
+    fi
     ( umask 226 && echo "stack ALL=(ALL) NOPASSWD:ALL" \
         > /etc/sudoers.d/50_stack_sh )
 
@@ -187,6 +191,10 @@ else
     echo "Defaults:`whoami` secure_path=/sbin:/usr/sbin:/usr/bin:/bin" >> $TEMPFILE
     chmod 0440 $TEMPFILE
     sudo chown root:root $TEMPFILE
+    if [ ! -d /etc/sudoers.d ]; then
+        sudo mkdir /etc/sudoers.d
+        sudo chmod 750 /etc/sudoers.d
+    fi
     sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
 
     # Set up the rootwrap sudoers
