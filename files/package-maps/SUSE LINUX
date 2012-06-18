@@ -30,11 +30,11 @@ libvirt-bin libvirt
 #libxml2-devel
 #libxml2-python
 #lvm2
-m2crypto python-M2Crypto
+m2crypto python-M2Crypto>0.20
 #memcached
 mod_wsgi apache2-mod_wsgi
 MySQL-python python-mysql
-mysql-server mysql-community-server
+mysql-server mysql
 numpy python-numpy
 openssh-server openssh
 #parted
@@ -45,7 +45,7 @@ pylint python-pylint
 python-BeautifulSoup python-beautifulsoup
 #python-boto
 #python-carrot
-#python-cheetah
+python-cheetah python-Cheetah>2.3
 #python-configobj
 #python-coverage
 #python-dateutil
