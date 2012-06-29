@@ -1,0 +1,116 @@
+# This is a map of Debian package names to Fedora package names
+#
+# Format is the following:
+#  debian-package-name     fedora-package-name,another-fedora-package-name
+# Alternatively, you can use " " instead of "," to separate package names:
+#  foobar                  foo bar
+#
+# To completely ignore a Debian package, use "-" as mapped package name:
+#  debian-package-name     -
+#
+# For convenience, if a package has the same name, you can simply put its name
+# with no map:
+#  debian-package-name
+#
+# Please keep the list alphabetically sorted.
+
+
+# nodejs isn't in Fedora yet: https://bugzilla.redhat.com/show_bug.cgi?id=815018
+nodejs                          -
+
+apache2                         httpd
+arping                          iputils
+bridge-utils                    bridge-utils
+curl                            curl
+dnsmasq-base                    dnsmasq
+dnsmasq-utils                   dnsmasq-utils
+ebtables                        ebtables
+euca2ools                       euca2ools
+gawk                            gawk
+gcc                             gcc
+git-core                        git-core
+iptables                        iptables
+iputils-arping                  iputils
+iputils-ping                    iputils
+kpartx                          kpartx
+kvm                             kvm
+libapache2-mod-wsgi             mod_wsgi
+libldap2-dev                    openldap-devel
+libsasl2-dev                    cyrus-sasl-devel
+libvirt-bin                     libvirt
+libxml2-dev                     libxml2-devel
+locate                          mlocate
+lsof                            lsof
+lvm2                            lvm2
+memcached                       memcached
+mysql-server                    mysql-server
+open-iscsi                      iscsi-initiator-utils
+open-iscsi-utils                iscsi-initiator-utils
+openssh-server                  openssh-server
+parted                          parted
+pep8                            python-pep8
+psmisc                          psmisc
+pylint                          pylint
+python-anyjson                  python-anyjson
+python-argparse                 python-argparse
+python-bcrypt                   py-bcrypt
+python-beautifulsoup            python-BeautifulSoup
+python-boto                     python-boto
+python-carrot                   python-carrot
+python-cheetah                  python-cheetah
+python-cherrypy3                python-cherrypy
+python-configobj                python-configobj
+python-coverage                 python-coverage
+python-dateutil                 python-dateutil
+python-dev                      python-devel
+python-eventlet                 python-eventlet
+python-feedparser               python-feedparser
+python-gflags                   python-gflags
+python-greenlet                 python-greenlet
+python-iso8601                  python-iso8601
+python-kombu                    python-kombu
+python-libvirt                  libvirt-python
+python-libxml2                  libxml2-python
+python-lockfile                 python-lockfile
+python-lxml                     python-lxml
+python-m2crypto                 m2crypto
+python-migrate                  python-migrate
+python-mox                      python-mox
+python-mysqldb                  MySQL-python
+python-netaddr                  python-netaddr
+python-netifaces                python-netifaces
+python-nose                     python-nose
+python-numpy                    numpy
+python-paste                    python-paste
+python-pastedeploy              python-paste-deploy
+python-pastescript              python-paste-script
+python-pip                      python-pip
+python-pysqlite2                python-sqlite2
+python-qpid                     python-qpid
+python-routes                   python-routes
+python-setuptools               python-setuptools
+python-simplejson               python-simplejson
+python-sphinx                   python-sphinx
+python-sqlalchemy               python-sqlalchemy
+python-suds                     python-suds
+python-tempita                  python-tempita
+python-unittest2                python-unittest2
+python-virtualenv               python-virtualenv
+python-webob                    python-webob
+python-wsgiref                  python-wsgiref
+python-xattr                    pyxattr
+qpidd                           qpid-cpp-server
+rabbitmq-server                 rabbitmq-server
+rsyslog-relp                    rsyslog-relp
+screen                          screen
+socat                           socat
+sqlite3                         sqlite
+sudo                            sudo
+tar                             tar
+tcpdump                         tcpdump
+tgt                             scsi-target-utils
+unzip                           unzip
+vim-nox                         vim-enhanced
+vlan                            vconfig
+wget                            wget
+xfsprogs                        xfsprogs
