@@ -247,6 +247,19 @@ GetOSVersion() {
 }
 
 
+# Determine if current distribution is a SUSE-based distribution
+# (openSUSE, SLE).
+# is_suse
+function is_suse {
+    if [[ -z "$os_VENDOR" ]]; then
+        GetOSVersion
+    fi
+
+    [[ "$os_VENDOR" = "openSUSE" || "$os_VENDOR" = "SUSE LINUX" ]]
+    return $?
+}
+
+
 # git clone only if directory doesn't exist already.  Since ``DEST`` might not
 # be owned by the installation user, we create the directory and change the
 # ownership to the proper user.
