@@ -313,3 +313,10 @@ if [[ "$VAL" = "non-existing" ]]; then
 else
     echo "map_package() on a non-existing package failed: $VAL != non-existing"
 fi
+
+echo "Checking all packages are present in package maps"
+for package in `cat $TOP/files/apts/* | sed "s/#.*//g" | sort -u`; do
+    for map in $TOP/files/package-maps/*; do
+        grep -q "^$package " "$map" || grep -q "^$package$" "$map" || echo "$package not present in $map"
+    done
+done
