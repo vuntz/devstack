@@ -628,11 +628,7 @@ set -o xtrace
 # Openstack uses a fair number of other projects.
 
 # Install package requirements
-if [[ "$os_PACKAGE" = "deb" ]]; then
-    install_package $(get_packages $FILES/apts)
-else
-    install_package $(get_packages $FILES/rpms)
-fi
+install_package $(get_packages $FILES/apts)
 
 # Install python requirements
 pip_install $(get_packages $FILES/pips | sort -u)
@@ -776,11 +772,9 @@ if is_service_enabled rabbit; then
     # change the rabbit password since the default is "guest"
     sudo rabbitmqctl change_password guest $RABBIT_PASSWORD
 elif is_service_enabled qpid; then
+    install_package qpidd
     if [[ "$os_PACKAGE" = "rpm" ]]; then
-        install_package qpid-cpp-server
         restart_service qpidd
-    else
-        install_package qpidd
     fi
 fi
 
@@ -928,19 +922,17 @@ if is_service_enabled horizon; then
     # Create an empty directory that apache uses as docroot
     sudo mkdir -p $HORIZON_DIR/.blackhole
 
+    # Install apache2, which is NOPRIME'd
+    install_package apache2 libapache2-mod-wsgi
     if [[ "$os_PACKAGE" = "deb" ]]; then
-        # Install apache2, which is NOPRIME'd
         APACHE_NAME=apache2
         APACHE_CONF=sites-available/horizon
-        install_package apache2 libapache2-mod-wsgi
         # Clean up the old config name
         sudo rm -f /etc/apache2/sites-enabled/000-default
         # Be a good citizen and use the distro tools here
         sudo touch /etc/$APACHE_NAME/$APACHE_CONF
         sudo a2ensite horizon
     else
-        # Install httpd, which is NOPRIME'd
-        install_package httpd mod_wsgi
         if is_suse; then
             APACHE_NAME=apache2
             APACHE_CONF=vhosts.d/horizon.conf
@@ -1308,12 +1300,7 @@ if is_service_enabled n-cpu; then
 
     # Virtualization Configuration
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    if [[ "$os_PACKAGE" = "deb" ]]; then
-        LIBVIRT_PKG_NAME=libvirt-bin
-    else
-        LIBVIRT_PKG_NAME=libvirt
-    fi
-    install_package $LIBVIRT_PKG_NAME
+    install_package libvirt-bin
 
     # Force IP forwarding on, just on case
     sudo sysctl -w net.ipv4.ip_forward=1
