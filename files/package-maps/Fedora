@@ -114,3 +114,4 @@ vim-nox                         vim-enhanced
 vlan                            vconfig
 wget                            wget
 xfsprogs                        xfsprogs
+xinetd                          xinetd

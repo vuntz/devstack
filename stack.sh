@@ -1513,6 +1513,7 @@ if is_service_enabled swift; then
     if [[ "$os_PACKAGE" = "deb" ]]; then
         sudo sed -i '/^RSYNC_ENABLE=false/ { s/false/true/ }' /etc/default/rsync
     else
+        install_package xinetd
         sudo sed -i '/disable *= *yes/ { s/yes/no/ }' /etc/xinetd.d/rsync
     fi
 
