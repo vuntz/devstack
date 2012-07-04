@@ -482,36 +482,74 @@ function update_repos() {
 # This is needed to make data files more distro-agnostic.
 # map_package package [package ...]
 function map_package() {
-    local vendor_match package match matches
+    local vendor_map OIFS line arg
+    # Associative array (bash 4 feature)
+    declare -A map
 
     if [[ -z "$os_VENDOR" ]]; then
         GetOSVersion
     fi
 
-    # We can't assume $TOP_DIR is set here, so find the top directory again
-    vendor_match="`dirname ${BASH_SOURCE[0]}`/files/package-maps/$os_VENDOR"
+    if [[ -z "$DISTRO" ]]; then
+        echo "No distro set in DISTRO"
+        return 1
+    fi
 
-    if [[ ! -f "$vendor_match" ]]; then
-        for package in "$@"; do
-            echo $package
-        done
+    # We can't assume $TOP_DIR is set here, so find the top directory again
+    vendor_map="`dirname ${BASH_SOURCE[0]}`/files/package-maps/$os_VENDOR"
+
+    if [[ ! -f "$vendor_map" ]]; then
+        echo "$@"
         return
     fi
 
-    for package in "$@"; do
-        matches=`grep -E -m1 "^$package |^$package$" "$vendor_match" | sed "s:^$package::g;s:#.*::g;s:^ *::g;s: *$::g"`
-        if [[ -z "$matches" ]]; then
-            # This can be two cases:
-            #  - Empty mapping: this is an implicit mapping to the same name
-            #  - Missing entry in map: we can't do better than returning the same name
-            echo $package
-        elif [[ "$matches" = "-" ]]; then
-            # Explicit exclusion of the package
-            true
+    OIFS=$IFS
+    IFS=$'\n'
+    for line in $(<${vendor_map}); do
+        local mapping package mapped
+
+        if [[ $line =~ (.*)#.*dist:([^ ]*) ]]; then
+            # We are using BASH regexp matching feature.
+            mapping=${BASH_REMATCH[1]}
+            distros=${BASH_REMATCH[2]}
+            # In bash ${VAR,,} will lowecase VAR
+            [[ ! ${distros,,} =~ ${DISTRO,,} ]] && continue
         else
-            for match in ${matches//,/ }; do  # In bash ${VAR,,} will lowercase VAR
-                echo $match
-            done
+            mapping=$line
+        fi
+
+        mapping=${mapping%%#*}
+
+        regex='^[[:space:]]*([^[:space:]]+)[[:space:]]*(.*)'
+        if [[ $mapping =~ $regex ]]; then
+            package=${BASH_REMATCH[1]}
+            mapped=${BASH_REMATCH[2]}
+            mapped=${mapped//,/ }
+
+            if [[ $mapped =~ ^- ]]; then
+                map[$package]=-
+                continue
+            fi
+            [[ -z $mapped ]] && mapped=$package
+
+            map[$package]=$mapped
+        fi
+    done
+    IFS=$OIFS
+
+    for arg in "$@"; do
+        local mapped
+
+        mapped=${map[$arg]}
+        if [[ $mapped = - ]]; then
+            # Explicit exclusion of the package
+            continue
+        elif [[ -n $mapped ]]; then
+            echo $mapped
+        else
+            #  Missing entry in map: we can't do better than returning the same
+            #  name
+            echo $arg
         fi
     done
 }
