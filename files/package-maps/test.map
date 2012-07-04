@@ -1,0 +1,9 @@
+# This is a map we use purely for testing reasons
+
+foo                             bar
+foo2                            bar2
+foo-multiple                    foo,bar
+foo-dist                        foo-test-1 #dist:test-1
+foo-nodist                      foo-test-2 #dist:test-2
+foo-implicit
+foo-ignore                      -
