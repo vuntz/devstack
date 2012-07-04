@@ -77,6 +77,8 @@ python-libxml2                  libxml2-python
 python-lockfile                 python-lockfile
 python-lxml                     python-lxml
 python-m2crypto                 python-M2Crypto
+# SLE has the old name for python-m2crypto
+python-m2crypto                 python-m2crypto # dist:sle11sp2
 python-migrate                  python-sqlalchemy-migrate
 python-mox                      python-mox
 python-mysqldb                  python-mysql
@@ -91,6 +93,8 @@ python-pip                      python-pip
 python-pysqlite2                python-pysqlite
 python-routes                   python-Routes
 python-setuptools               python-distribute
+# Force python-setuptools for SLE
+python-setuptools               python-setuptools # dist:sle11sp2
 python-simplejson               python-simplejson
 python-sphinx                   python-Sphinx
 python-sqlalchemy               python-SQLAlchemy
