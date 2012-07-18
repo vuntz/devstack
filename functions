@@ -644,7 +644,11 @@ function restart_service() {
     if [[ "$os_PACKAGE" = "deb" ]]; then
         sudo /usr/sbin/service $1 restart
     else
-        sudo /sbin/service $1 restart
+        if is_suse; then
+            sudo /etc/init.d/$1 restart
+        else
+            sudo /sbin/service $1 restart
+        fi
     fi
 }
 
@@ -675,7 +679,11 @@ function start_service() {
     if [[ "$os_PACKAGE" = "deb" ]]; then
         sudo /usr/sbin/service $1 start
     else
-        sudo /sbin/service $1 start
+        if is_suse; then
+            sudo /etc/init.d/$1 start
+        else
+            sudo /sbin/service $1 start
+        fi
     fi
 }
 
@@ -689,7 +697,11 @@ function stop_service() {
     if [[ "$os_PACKAGE" = "deb" ]]; then
         sudo /usr/sbin/service $1 stop
     else
-        sudo /sbin/service $1 stop
+        if is_suse; then
+            sudo /etc/init.d/$1 stop
+        else
+            sudo /sbin/service $1 stop
+        fi
     fi
 }
 
