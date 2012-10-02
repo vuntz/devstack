@@ -578,6 +578,10 @@ function disable_negated_services() {
 # Distro-agnostic package installer
 # install_package package [package ...]
 function install_package() {
+    local mapped_packages
+
+    mapped_packages=$(map_package "$@" | xargs)
+
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
@@ -586,32 +590,114 @@ function install_package() {
         [[ "$NO_UPDATE_REPOS" = "True" ]] || apt_get update
         NO_UPDATE_REPOS=True
 
-        apt_get install "$@"
+        apt_get install $mapped_packages
     else
         if is_suse; then
-            zypper_install "$@"
+            zypper_install $mapped_packages
         else
-            yum_install "$@"
+            yum_install $mapped_packages
         fi
     fi
+}
+
+
+# Function to map the name of a module we want to the names of packages
+# existing on the running distribution, that match this module.
+# This is needed to make data files more distro-agnostic.
+# map_package package [package ...]
+function map_package() {
+    local vendor_map OIFS line arg
+    # Associative array (bash 4 feature)
+    declare -A map
+
+    if [[ -z "$DISTRO" ]]; then
+        GetDistro
+    fi
+
+    if [[ -z "$os_VENDOR" ]]; then
+        GetOSVersion
+    fi
+
+    # We can't assume $TOP_DIR is set here, so find the top directory again
+    vendor_map="`dirname ${BASH_SOURCE[0]}`/files/package-maps/$os_VENDOR"
+
+    if [[ ! -f "$vendor_map" ]]; then
+        echo "$@"
+        return
+    fi
+
+    OIFS=$IFS
+    IFS=$'\n'
+    for line in $(<${vendor_map}); do
+        local mapping package mapped
+
+        if [[ $line =~ (.*)#.*dist:([^ ]*) ]]; then
+            # We are using BASH regexp matching feature.
+            mapping=${BASH_REMATCH[1]}
+            distros=${BASH_REMATCH[2]}
+            # In bash ${VAR,,} will lowecase VAR
+            [[ ! ${distros,,} =~ ${DISTRO,,} ]] && continue
+        else
+            mapping=$line
+        fi
+
+        mapping=${mapping%%#*}
+
+        regex='^[[:space:]]*([^[:space:]]+)[[:space:]]*(.*)'
+        if [[ $mapping =~ $regex ]]; then
+            package=${BASH_REMATCH[1]}
+            mapped=${BASH_REMATCH[2]}
+            mapped=${mapped//,/ }
+
+            if [[ $mapped =~ ^- ]]; then
+                map[$package]=-
+                continue
+            fi
+            [[ -z $mapped ]] && mapped=$package
+
+            map[$package]=$mapped
+        fi
+    done
+    IFS=$OIFS
+
+    for arg in "$@"; do
+        local mapped
+
+        mapped=${map[$arg]}
+        if [[ $mapped = - ]]; then
+            # Explicit exclusion of the package
+            continue
+        elif [[ -n $mapped ]]; then
+            echo $mapped
+        else
+            #  Missing entry in map: we can't do better than returning the same
+            #  name
+            echo $arg
+        fi
+    done
 }
 
 
 # Distro-agnostic function to tell if a package is installed
 # is_package_installed package [package ...]
 function is_package_installed() {
+    local mapped_packages
+
     if [[ -z "$@" ]]; then
         return 1
     fi
 
+    mapped_packages=$(map_package "$@" | xargs)
+
     if [[ -z "$os_PACKAGE" ]]; then
         GetOSVersion
     fi
+
     if [[ "$os_PACKAGE" = "deb" ]]; then
-        dpkg -l "$@" > /dev/null
+        dpkg -l $mapped_packages > /dev/null
         return $?
     else
-        rpm --quiet -q "$@"
+        rpm --quiet -q $mapped_packages
         return $?
     fi
 }

@@ -19,6 +19,12 @@
 # Learn more and get the most recent version at http://devstack.org
 
 
+# Check for bash 4, as we use associative arrays
+if [ -z "${BASH_VERSINFO[0]}" -o ${BASH_VERSINFO[0]} -lt 4 ]; then
+    echo "ERROR: version of bash is too old. Please install bash 4.0 or later."
+    exit 1
+fi
+
 # Keep track of the devstack directory
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
