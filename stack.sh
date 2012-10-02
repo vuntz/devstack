@@ -712,11 +712,7 @@ set -o xtrace
 
 # Install package requirements
 echo_summary "Installing package prerequisites"
-if [[ "$os_PACKAGE" = "deb" ]]; then
-    install_package $(get_packages $FILES/apts)
-else
-    install_package $(get_packages $FILES/rpms)
-fi
+install_package $(get_packages $FILES/apts)
 
 if [[ $SYSLOG != "False" ]]; then
     install_package rsyslog-relp
@@ -730,17 +726,9 @@ if is_service_enabled rabbit; then
     cat "$tfile"
     rm -f "$tfile"
 elif is_service_enabled qpid; then
-    if [[ "$os_PACKAGE" = "rpm" ]]; then
-        install_package qpid-cpp-server-daemon
-    else
-        install_package qpidd
-    fi
+    install_package qpidd
 elif is_service_enabled zeromq; then
-    if [[ "$os_PACKAGE" = "rpm" ]]; then
-        install_package zeromq python-zmq
-    else
-        install_package libzmq1 python-zmq
-    fi
+    install_package libzmq1 python-zmq
 fi
 
 if is_service_enabled mysql; then
@@ -772,12 +760,10 @@ EOF
 fi
 
 if is_service_enabled horizon; then
-    if [[ "$os_PACKAGE" = "deb" ]]; then
-        # Install apache2, which is NOPRIME'd
-        install_package apache2 libapache2-mod-wsgi
-    else
+    # Install apache2, which is NOPRIME'd
+    install_package apache2 libapache2-mod-wsgi
+    if [[ "$os_PACKAGE" = "rpm" ]]; then
         sudo rm -f /etc/httpd/conf.d/000-*
-        install_package httpd mod_wsgi
     fi
 fi
 

@@ -386,12 +386,7 @@ function install_novaclient() {
 # install_nova() - Collect source and prepare
 function install_nova() {
     if is_service_enabled n-cpu; then
-        if [[ "$os_PACKAGE" = "deb" ]]; then
-            LIBVIRT_PKG_NAME=libvirt-bin
-        else
-            LIBVIRT_PKG_NAME=libvirt
-        fi
-        install_package $LIBVIRT_PKG_NAME
+        install_package libvirt-bin
         # Install and configure **LXC** if specified.  LXC is another approach to
         # splitting a system into many smaller parts.  LXC uses cgroups and chroot
         # to simulate multiple systems.

@@ -11,6 +11,6 @@ python-eventlet
 python-sqlalchemy
 python-mysqldb
 python-pyudev
-python-qpid # dist:precise
+python-qpid # dist:precise,f16,f17
 dnsmasq-base
-dnsmasq-utils # for dhcp_release only available in dist:oneiric,precise,quantal
+dnsmasq-utils # for dhcp_release only available in dist:oneiric,precise,quantal,f16,f17
