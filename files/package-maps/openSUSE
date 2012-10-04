@@ -1,0 +1,128 @@
+# This is a map of Debian package names to openSUSE package names
+#
+# Format is the following:
+#  debian-package-name     opensuse-package-name,another-opensuse-package-name
+# Alternatively, you can use " " instead of "," to separate package names:
+#  foobar                  foo bar
+#
+# To completely ignore a Debian package, use "-" as mapped package name:
+#  debian-package-name     -
+#
+# For convenience, if a package has the same name, you can simply put its name
+# with no map:
+#  debian-package-name
+#
+# Please keep the list alphabetically sorted.
+
+
+# need to build dhcp_release
+dnsmasq-utils                   -
+# qpid isn't in openSUSE yet
+python-qpid                     -
+qpidd                           -
+# mongodb isn't in openSUSE yet
+mongodb-server                  -
+python-pymongo                  -
+
+apache2                         apache2
+arping                          iputils
+bridge-utils                    bridge-utils
+curl                            curl
+dnsmasq-base                    dnsmasq
+ebtables                        ebtables
+euca2ools                       euca2ools
+gawk                            gawk
+gcc                             gcc
+git-core                        git-core
+iptables                        iptables
+iputils-arping                  iputils
+iputils-ping                    iputils
+kpartx                          kpartx
+kvm                             kvm
+libapache2-mod-wsgi             apache2-mod_wsgi
+libldap2-dev                    openldap2-devel
+libsasl2-dev                    cyrus-sasl-devel
+libvirt-bin                     libvirt
+libxml2-dev                     libxml2-devel
+locate                          findutils-locate
+lsof                            lsof
+lvm2                            lvm2
+memcached                       memcached
+mysql                           mysql-community-server
+mysql-server                    mysql-community-server
+nodejs                          nodejs
+open-iscsi                      open-iscsi
+open-iscsi-utils                open-iscsi
+openssh-server                  openssh
+parted                          parted
+pep8                            python-pep8
+psmisc                          psmisc
+pylint                          python-pylint
+python-anyjson                  python-anyjson
+python-argparse                 python-argparse
+python-bcrypt                   python-py-bcrypt
+python-beautifulsoup            python-beautifulsoup
+python-boto                     python-boto
+python-carrot                   python-carrot
+python-cheetah                  python-cheetah
+python-cherrypy3                python-CherryPy
+python-cmd2                     python-cmd2
+python-configobj                python-configobj
+python-coverage                 python-coverage
+python-dateutil                 python-dateutil
+python-dev                      python-devel
+python-eventlet                 python-eventlet
+python-feedparser               python-feedparser
+python-gflags                   python-python-gflags
+python-greenlet                 python-greenlet
+python-iso8601                  python-iso8601
+python-kombu                    python-kombu
+python-libvirt                  libvirt-python
+python-libxml2                  libxml2-python
+python-lockfile                 python-lockfile
+python-lxml                     python-lxml
+python-m2crypto                 python-M2Crypto
+# SLE has the old name for python-m2crypto
+python-m2crypto                 python-m2crypto # dist:sle11sp2
+python-migrate                  python-sqlalchemy-migrate
+python-mox                      python-mox
+python-mysqldb                  python-mysql
+python-netaddr                  python-netaddr
+python-netifaces                python-netifaces
+python-nose                     python-nose
+python-numpy                    python-numpy
+python-paste                    python-Paste
+python-pastedeploy              python-PasteDeploy
+python-pastescript              python-PasteScript
+python-pip                      python-pip
+python-pysqlite2                python-pysqlite
+python-pyudev                   python-pyudev
+python-routes                   python-Routes
+python-setuptools               python-distribute
+# Force python-setuptools for SLE
+python-setuptools               python-setuptools # dist:sle11sp2
+python-simplejson               python-simplejson
+python-sphinx                   python-Sphinx
+python-sqlalchemy               python-SQLAlchemy
+python-suds                     python-suds
+python-tempita                  python-Tempita
+python-unittest2                python-unittest2
+python-virtualenv               python-virtualenv
+python-webob                    python-WebOb
+python-wsgiref                  python-wsgiref
+python-xattr                    python-xattr
+rabbitmq-server                 rabbitmq-server
+rsyslog-relp                    rsyslog-module-relp
+screen                          screen
+socat                           socat
+sqlite3                         sqlite3
+sudo                            sudo
+tar                             tar
+tcpdump                         tcpdump
+tgt                             tgt
+unzip                           unzip
+vim-nox                         vim-enhanced
+vlan                            vlan
+wget                            wget
+xfsprogs                        xfsprogs
+xinetd                          xinetd
