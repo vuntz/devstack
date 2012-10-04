@@ -280,3 +280,85 @@ if [[ "$VAL" -ne 0 ]]; then
 else
     echo "is_package_installed() on non-existing package failed"
 fi
+
+
+echo "Testing map_package()"
+
+# We force the use of the test map
+os_VENDOR="test.map"
+DISTRO="test-1"
+
+# Test a package with a map
+grep -q "^foo  *bar$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package foo)
+if [[ "$VAL" = "bar" ]]; then
+    echo "OK"
+else
+    echo "map_package() on a package with a map failed: $VAL != bar"
+fi
+
+grep -q "^foo2  *bar2$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+# Test two packages
+VAL=$(map_package foo foo2 | xargs)
+if [[ "$VAL" = "bar bar2" ]]; then
+    echo "OK"
+else
+    echo "map_package() on two package failed: \"$VAL\" != \"bar2\""
+fi
+
+# Test package mapped to several packages
+grep -q "^foo-multiple  *foo,bar$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package foo-multiple | xargs)
+if [[ "$VAL" = "foo bar" ]]; then
+    echo "OK"
+else
+    echo "map_package() on two package failed: \"$VAL\" != \"foo bar\""
+fi
+
+# Test package with map using a dist
+grep -q "^foo-dist  *foo-test-1  *#.*dist:.*test-1.*$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package foo-dist)
+if [[ "$VAL" = "foo-test-1" ]]; then
+    echo "OK"
+else
+    echo "map_package() on two package failed: \"$VAL\" != \"foo-test-1\""
+fi
+
+# Test package with map not matching the dist
+grep -q "^foo-nodist  *foo-test-2  *#.*dist:.*test-2.*$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package foo-nodist)
+if [[ "$VAL" = "foo-nodist" ]]; then
+    echo "OK"
+else
+    echo "map_package() on two package failed: \"$VAL\" != \"foo-nodist\""
+fi
+
+# Test package with implicit map
+grep -q "^foo-implicit *$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package foo-implicit)
+if [[ "$VAL" = "foo-implicit" ]]; then
+    echo "OK"
+else
+    echo "map_package() on two package failed: \"$VAL\" != \"foo-implicit\""
+fi
+
+# Test package that gets ignored
+grep -q "^foo-ignore  *-$" "$TOP/files/package-maps/$os_VENDOR" || echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package foo-ignore)
+if [[ -z "$VAL" ]]; then
+    echo "OK"
+else
+    echo "map_package() on two package failed: \"$VAL\" != \"\""
+fi
+
+# Test non-existing package (~ no map)
+grep -q "non-existing" "$TOP/files/package-maps/$os_VENDOR" && echo "Invalid test for map_package() on a package with a map"
+VAL=$(map_package non-existing)
+if [[ "$VAL" = "non-existing" ]]; then
+    echo "OK"
+else
+    echo "map_package() on a non-existing package failed: $VAL != non-existing"
+fi
+
+unset os_VENDOR
+unset DISTRO
